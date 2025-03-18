@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+body{
+    background-color: #272727;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#root{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.main{
+    max-width: 450px;
+    width: 100%;
+    height: 800px;
+    background-color: #272727;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 10px;
+    border: 1px solid #A916DA;
+    font-family: "Open Sans", sans-serif;
+}
+
+.logo{
+    max-width: 300px;
+    padding: 100px 0 20px 0;
+}
+
+.pimentinhas-title{
+    width: 80%;
+    text-align: center;
+    color: white;
+    padding: 20px 0;
+    font-size: 2em;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.botao{
+    padding: 15px 60px;
+    background-color: #DA4416;
+    color: white;
+    border: 1px solid #202020;
+    border-radius: 5px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 24px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 60px;
+}
+
+.botao:hover{
+    background-color: #ff450d;
+}
+
+.botao:active{
+    background-color: #882506;
+}
+
+.botao-compartilhar{
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    padding-bottom: 100px;
+}
+
+.pimenta_branca{
+    max-width: 51px;
+    padding-top: 100px;
+}
+
+.participantes-title{
+    width: 80%;
+    text-align: center;
+    color: white;
+    padding: 0;
+    margin: 0;
+    font-size: 2em;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.participantes-form{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+}
+
+.input-participantes{
+    padding: 15px 25px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    border: 0;
+    margin-bottom: 5px;
+}
+
+.botao-add-participantes{
+    padding: 15px 25px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+    background-color: #38CABE;
+    border-radius: 5px;
+    border: 0;
+    cursor: pointer;
+}
+
+.botao-add-participantes:hover{
+    background-color: #2cd8ca;
+}
+
+.lista-participantes{
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+.lista-participantes li{
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    width: 90%;
+    background-color: #DA4416;
+    margin-bottom: 5px;
+    padding: 10px 5%;
+    color: white;
+    font-family: "Open Sans", sans-serif;
+}
+
+.participante-sorteado{
+    color: white;
+    font-family: "Open Sans", sans-serif;
+    font-size: 36px;
+}
+
+.pergunta-sorteada{
+    color: white;
+    font-family: "Open Sans", sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+    text-align: center;
+    padding: 0 10%;
+}
+
+.botao-voltar{
+    background-color: transparent;
+    border: 0;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
