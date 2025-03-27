@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import WarningModal from '../components/warningModal';
 
 function Setup() {
   const [participants, setParticipants] = useState([]);
   const [name, setName] = useState('');
   const [spiciness, setSpiciness] = useState(1);
+  const [showWarning, setShowWarning] = useState(false);
 
   const addParticipant = () => {
     if (name.trim()) {
@@ -20,16 +22,33 @@ function Setup() {
     setSpiciness(level);
   };
 
+  const proceedToGame = () => {
+    localStorage.setItem('participants', JSON.stringify(participants));
+    localStorage.setItem('spiciness', spiciness);
+    window.location.href = '/game';
+  }
+
   const startGame = () => {
     if (participants.length === 0) {
       alert('É preciso adicionar pelo menos um participante para iniciar o jogo!');
       return;
     }
-  
-    localStorage.setItem('participants', JSON.stringify(participants));
-    localStorage.setItem('spiciness', spiciness);
-    window.location.href = '/game';
+
+    if (spiciness === 5){
+      setShowWarning(true);
+    } else {
+      proceedToGame();
+    }
   };
+
+  const handleConfirmWarning = () => {
+    setShowWarning(false);
+    proceedToGame();
+  }
+
+  const handleCloseWarning = () => {
+    setShowWarning(false);
+  }
 
   return (
     <div className='main'>
@@ -72,6 +91,12 @@ function Setup() {
       </div>
 
       <button className='botao' onClick={startGame}>Começar</button>
+
+      <WarningModal
+        show={showWarning}
+        onClose={handleCloseWarning}
+        onConfirm={handleConfirmWarning}
+      />
     </div>
   );
 }

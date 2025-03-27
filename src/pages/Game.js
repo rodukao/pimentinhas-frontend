@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import WarningModal from '../components/warningModal';
 
 function Game() {
   const [participants, setParticipants] = useState([]);
@@ -7,6 +8,7 @@ function Game() {
   const [currentParticipant, setCurrentParticipant] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState('');
   const [isFetchingQuestion, setIsFetchingQuestion] = useState(false);
+  const [showWarning, setShowWarning] = useState(false); 
 
   useEffect(() => {
     const storedParticipants = localStorage.getItem('participants');
@@ -59,12 +61,49 @@ function Game() {
     }
   };
 
+  const fetchQuestionForCurrentParticipant = async (newSpiceLevel) => {
+      if (!currentParticipant || isFetchingQuestion) return;
+
+      setIsFetchingQuestion(true);
+      setSpiciness(newSpiceLevel);
+      localStorage.setItem('spiciness', newSpiceLevel);
+
+      try{
+        const response = await axios.get(
+          `https://django-perguntas-pimentinhas.onrender.com/api/perguntas?level=${newSpiceLevel}`
+        );
+        setCurrentQuestion(response.data.question);
+      } catch (error){
+        console.error('Erro ao buscar nova pergunta para o mesmo participante:', error);
+        setCurrentQuestion('Não foi possível buscar pergunta agora.');
+      } finally {
+        setIsFetchingQuestion(false);
+      }
+  };
+
   // Muda pimentas (spiciness) e já pega nova pergunta
   const handleClickPepper = (level) => {
-    setSpiciness((old) => {
-      pickNewQuestionAndParticipant(participants, level);
-      return level;
-    });
+    if(level === spiciness || isFetchingQuestion){
+      return;
+    }
+
+    if (level === 5){
+      setShowWarning(true);
+    } else {
+      fetchQuestionForCurrentParticipant(level);
+    }
+  };
+
+  // 4. Funções Handler para o Modal
+  const handleConfirmWarning = () => {
+    setShowWarning(false); // Fecha o modal
+    // Continua para buscar a pergunta do nível 5 para o participante atual
+    fetchQuestionForCurrentParticipant(5);
+  };
+  
+  const handleCloseWarning = () => {
+    setShowWarning(false); // Apenas fecha o modal
+    // Não muda o nível nem busca pergunta
   };
 
   const nextQuestion = () => {
@@ -94,14 +133,19 @@ function Game() {
               key={level}
               src={pepperImg}
               alt={level <= spiciness ? 'Pimenta Vermelha' : 'Pimenta Cinza'}
-              style={{ width: '40px', cursor: 'pointer', marginRight: '5px' }}
-              onClick={() => handleClickPepper(level)}
+              style={{
+                  width: '40px',
+                  cursor: isFetchingQuestion || level === spiciness ? 'default' : 'pointer', // Muda cursor se desabilitado
+                  marginRight: '5px',
+                  opacity: isFetchingQuestion || level === spiciness ? 0.6 : 1 // Atenua se desabilitado
+              }}
+              onClick={() => handleClickPepper(level)} // Chama a função modificada
             />
           );
         })}
       </div>
 
-      <h3 className="participante-sorteado">{currentParticipant}</h3>
+      <h3 className="participante-sorteado">{currentParticipant || 'Sorteando...'}</h3>
       <p className="pergunta-sorteada">{questionToShow}</p>
 
       <button
@@ -115,6 +159,12 @@ function Game() {
       <button className="botao-voltar" onClick={goBack}>
         Voltar
       </button>
+
+      <WarningModal
+        show={showWarning}
+        onClose={handleCloseWarning}
+        onConfirm={handleConfirmWarning}
+      />
     </div>
   );
 }
